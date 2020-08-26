@@ -45,25 +45,25 @@
             let product_cart = [];
             let content = {};
             
-            // Funciones
+            // Features
             function renderItems() {
                 for (let info of baseDeDatos) {
-                    // Estructura
+                    // Structure
                     let miNodo = document.createElement('div');
                     miNodo.classList.add('card', 'col-sm-4');
                     // Body
                     let miNodoCardBody = document.createElement('div');
                     miNodoCardBody.classList.add('card-body');
-                    // Titulo
+                    // Name
                     let miNodoTitle = document.createElement('h5');
                     miNodoTitle.classList.add('card-title');
                     miNodoTitle.textContent = info['nombre'];
                    
-                    // Precio
+                    // Price
                     let miNodoPrecio = document.createElement('p');
                     miNodoPrecio.classList.add('card-text');
-                    miNodoPrecio.textContent = info['precio'] + '€';
-                    // Boton 
+                    miNodoPrecio.textContent = info['precio'] + '$';
+                    // Button
                     let miNodoBoton = document.createElement('button');
                     miNodoBoton.classList.add('btn', 'btn-primary');
                     miNodoBoton.textContent = '+';
@@ -71,7 +71,7 @@
                     miNodoBoton.addEventListener('click', anyadirCarrito);
                     
                   
-                    // Insertamos
+                    // Insert
                     
                     miNodoCardBody.appendChild(miNodoTitle);
                     miNodoCardBody.appendChild(miNodoPrecio);
@@ -82,39 +82,39 @@
             }
 
             function anyadirCarrito () {
-                // Anyadimos el Nodo a nuestro carrito
+                // Add the nodo car
                 carrito.push(this.getAttribute('marcador'))
-                // Calculo el total
+                // calculate the total
                 calcularTotal();
-                // Renderizamos el carrito 
+                // We render the cart
                 renderizarCarrito();
             }
             
 
             function renderizarCarrito() {
-                // Vaciamos todo el html
+                // We empty all the html
                 $carrito.textContent = '';
                 product_cart = [];
-                // Quitamos los duplicados
+                // We remove duplicates
                 let carritoSinDuplicados = [...new Set(carrito)];
-                // Generamos los Nodos a partir de carrito
+                //We generate the Nodes from cart
                 carritoSinDuplicados.forEach(function (item, indice) {
-                    // Obtenemos el item que necesitamos de la variable base de datos
+                    // We obtain the item we need from the database variable
                     let miItem = baseDeDatos.filter(function(itemBaseDatos) {
                         return itemBaseDatos['id'] == item;
                         
                     });
                     
-                    // Cuenta el número de veces que se repite el producto
+                    // Counts the number of times the product is repeated
                     let numeroUnidadesItem = carrito.reduce(function (total, itemId) {
                         return itemId === item ? total += 1 : total;
                     }, 0);
                     
                     
-                    // Creamos el nodo del item del carrito
+                    //We create the node of the cart item
                     let miNodo = document.createElement('li');
                     miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
-                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0]['nombre']} - ${miItem[0]['precio']}€`;
+                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0]['nombre']} - ${miItem[0]['precio']}$`;
                     product_cart.push(
                         {
                             "quantity":numeroUnidadesItem,
@@ -123,7 +123,7 @@
                             
                         }
                     );
-                    // Boton de borrar
+                    // delete button
                     console.log(product_cart);
                     let miBoton = document.createElement('button');
                     miBoton.classList.add('btn', 'btn-danger', 'mx-5');
@@ -131,7 +131,7 @@
                     miBoton.style.marginLeft = '1rem';
                     miBoton.setAttribute('item', item);
                     miBoton.addEventListener('click', borrarItemCarrito);
-                    // Mezclamos nodos
+                    // We mix nodes
                     miNodo.appendChild(miBoton);
                     $carrito.appendChild(miNodo);
                 })
@@ -141,39 +141,39 @@
 
             function borrarItemCarrito() {
                 console.log()
-                // Obtenemos el producto ID que hay en el boton pulsado
+                // We obtain the product ID that is in the button pressed
                 let id = this.getAttribute('item');
-                // Borramos todos los productos
+                // We delete all products
                 carrito = carrito.filter(function (carritoId) {
                     return carritoId !== id;
                 });
-                // volvemos a renderizar
+                // we re-render
                 renderizarCarrito();
-                // Calculamos de nuevo el precio
+                // We calculate the price again
                 calcularTotal();
             }
 
             function calcularTotal() {
-                // Limpiamos precio anterior
+                // We clean previous price
                 total = 0;
-                // Recorremos el array del carrito
+                // We go through the cart array
                 for (let item of carrito) {
-                    // De cada elemento obtenemos su precio
+                    // We obtain its price for each item
                     let miItem = baseDeDatos.filter(function(itemBaseDatos) {
                         return itemBaseDatos['id'] == item;
                     });
                     total = total + miItem[0]['precio'];
                 }
-                // Formateamos el total para que solo tenga dos decimales
+                // We format the total so that it only has two decimal places
                 let totalDosDecimales = total.toFixed(2);
-                // Renderizamos el precio en el HTML
+                // We render the price in the HTML
                 $total.textContent = totalDosDecimales;
             }
 
             function vaciarCarrito() {
-                // Limpiamos los productos guardados
+                // We clean stored products
                 carrito = [];
-                // Renderizamos los cambios
+                // We render the changes
                 renderizarCarrito();
                 calcularTotal();
             }
@@ -218,12 +218,12 @@
                
             }
 
-            // Eventos
+            // Events
             $botonVaciar.addEventListener('click', vaciarCarrito);
             $botoncontinuar.addEventListener('click', continuarCarrito);
             $botoncompletado.addEventListener('click', completadoCarrito);
 
-            // Inicio
+            // Start
             renderItems();
             (async () => {
             const csrfToken = "{{ csrf_token() }}";
@@ -250,16 +250,16 @@
 <body>
     <div class="container">
         <div class="row">
-            <!-- Elementos generados a partir del JSON -->
+            <!-- Elements generated from JSON -->
             <main id="items" class="col-sm-8 row"></main>
-            <!-- Carrito -->
+            <!-- Car -->
             <aside class="col-sm-4">
-                <h2>Car</h2>
-                <!-- Elementos del carrito -->
+                <h2>Cart</h2>
+                <!-- Elements cart -->
                 <ul id="carrito" class="list-group"></ul>
                 <hr>
-                <!-- Precio total -->
-                <p class="text-right">Total: <span id="total"></span>&euro;</p>
+                <!-- Price -->
+                <p class="text-right">Total: <span id="total"></span>$</p>
                 <button id="boton-continuar" class="btn btn-danger">Continue</button>
                 <button id="boton-completado" class="btn btn-danger">completed</button>
                 
